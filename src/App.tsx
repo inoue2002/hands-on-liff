@@ -1,21 +1,22 @@
-import { useEffect, useState } from "react";
-import liff from "@line/liff";
-import "./App.css";
+import liff from '@line/liff';
+import { useEffect, useState } from 'react';
+import './App.css';
 
 function App() {
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
 
   useEffect(() => {
     liff
       .init({
-        liffId: import.meta.env.VITE_LIFF_ID
+        liffId: import.meta.env.VITE_LIFF_ID,
       })
-      .then(() => {
-        setMessage("LIFF init succeeded.");
+      .then(async () => {
+        const profile = await liff.getProfile();
+        setMessage(`Hello, ${profile.displayName}!`);
       })
       .catch((e: Error) => {
-        setMessage("LIFF init failed.");
+        setMessage('LIFF init failed.');
         setError(`${e}`);
       });
   });
@@ -29,11 +30,7 @@ function App() {
           <code>{error}</code>
         </p>
       )}
-      <a
-        href="https://developers.line.biz/ja/docs/liff/"
-        target="_blank"
-        rel="noreferrer"
-      >
+      <a href="https://developers.line.biz/ja/docs/liff/" target="_blank" rel="noreferrer">
         LIFF Documentation
       </a>
     </div>
